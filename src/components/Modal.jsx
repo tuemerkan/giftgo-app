@@ -10,7 +10,7 @@ function Modal({ children }) {
     return (
         <>
             <div onClick={closeHandler} className="fixed inset-0 bg-black bg-opacity-50" />
-            <dialog open className="fixed inset-0 flex items-center justify-center z-10">
+            <dialog open className="fixed inset-0 flex items-center justify-center">
                 {children}
             </dialog>
         </>

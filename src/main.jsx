@@ -7,6 +7,7 @@ import RootLayout from "./routes/RootLayout.jsx";
 import Posts, {loader as postsLoader} from "./routes/Posts.jsx";
 import NewPost, { action as newPostAction } from './routes/NewPost';
 import PostDetails, { loader as postDetailsLoader } from './routes/PostDetails';
+import UserProvider from "./providers/UserProvider.jsx";
 
 const router = createBrowserRouter([
     {
@@ -29,7 +30,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
     <GoogleOAuthProvider clientId="687778475490-04u2qfde8ijahleo9va1e77gh8f967rr.apps.googleusercontent.com">
         <React.StrictMode>
-            <RouterProvider router={router} />
+            <UserProvider>
+                <RouterProvider router={router} />
+            </UserProvider>
         </React.StrictMode>
     </GoogleOAuthProvider>
 )
