@@ -3,6 +3,7 @@ import { UserContext } from "../contexts/UserContext.jsx";
 
 const UserProvider = ({ children }) => {
   const [profile, setProfile] = useState();
+  // const [profile, setProfile] = useState({ name: "Tümi" });
   const [user, setUser] = useState();
 
   return (

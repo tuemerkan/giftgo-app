@@ -1,35 +1,51 @@
-import { Link, Form, redirect } from "react-router-dom";
+import { Link, Form } from "react-router-dom";
 import Modal from "../components/Modal";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext.jsx";
+import Dropzone from "../components/Dropzone.jsx";
 
 function NewPost() {
+  const [description, setDescription] = useState("");
+  const [condition, setCondition] = useState("new");
+  const [picture, setPicture] = useState("");
   const { profile } = useContext(UserContext);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // Need a FormData type object to send files to server
+    const formData = new FormData();
+    formData.append("name", profile.name);
+    formData.append("description", description);
+    formData.append("condition", condition);
+    formData.append("picture", picture);
+    const postData = Object.fromEntries(formData);
+
+    try {
+      console.log(postData);
+      await fetch("http://localhost:4000/posts", {
+        method: "POST",
+        body: JSON.stringify(postData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      window.location.href = "/";
+    } catch (error) {
+      console.log(postData);
+    }
+  };
+
   if (profile) {
     return (
       <Modal>
-        <Form
-          method="post"
-          className="w-full max-w-lg rounded-lg shadow-xl p-6"
-        >
+        <Form className="w-full max-w-lg rounded-lg shadow-xl p-6">
           <div>
             <label
-              htmlFor="name"
               name="author"
               id="author"
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             >
               Giver: {profile.name}
             </label>
-            <input
-              hidden
-              type="text"
-              id="name"
-              name="author"
-              value={profile.name}
-              required
-              placeholder="Your name"
-            />
           </div>
           <div>
             <label
@@ -38,16 +54,33 @@ function NewPost() {
             >
               Description:
             </label>
-            <input
-              id="body"
-              name="body"
+            <textarea
               required
+              id="description"
+              name="description"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
               rows={3}
               placeholder="Write a few words :)"
               className="appearance-none block w-full text-gray-700 border border-blue-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            ></input>
+            ></textarea>
           </div>
-          <ConditionDropdown />
+          <div>
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              Image:
+            </label>
+            <Dropzone setPicture={setPicture} />
+          </div>
+          <div>
+            <label
+              htmlFor="condition"
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            >
+              Condition:
+            </label>
+            <ConditionDropdown setConditionHandler={setCondition} />
+          </div>
+          <br />
           <div className="flex items-center justify-end border-b border-teal-500 py-2">
             <Link
               to=".."
@@ -58,7 +91,8 @@ function NewPost() {
             </Link>
             <button
               className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
             >
               Submit
             </button>
@@ -75,16 +109,18 @@ function NewPost() {
   }
 }
 
-const ConditionDropdown = () => {
+const ConditionDropdown = ({ setConditionHandler }) => {
   return (
     <div className="inline-block relative w-64">
-      <select className="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-        <option value="" disabled selected>
-          Select condition
-        </option>
-        <option>Brand new</option>
-        <option>Really good</option>
-        <option>Quite good</option>
+      <select
+        onChange={(event) => setConditionHandler(event.target.value)}
+        name="condition"
+        id="condition"
+        className="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+      >
+        <option defaultValue="Brand new">Brand new</option>
+        <option value="Really good">Really good</option>
+        <option value="Quite good">Quite good</option>
       </select>
       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
         <svg
@@ -100,17 +136,3 @@ const ConditionDropdown = () => {
 };
 
 export default NewPost;
-
-export async function action({ request }) {
-  const formData = await request.formData();
-  const postData = Object.fromEntries(formData); // { body: '...', author: '...' }
-  await fetch("http://localhost:4000/posts", {
-    method: "POST",
-    body: JSON.stringify(postData),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return redirect("/");
-}
