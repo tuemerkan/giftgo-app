@@ -3,6 +3,7 @@ import Modal from "../components/Modal";
 import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext.jsx";
 import Dropzone from "../components/Dropzone.jsx";
+import LocationSearchInput from "../components/LocationSearchInput.jsx";
 
 function NewPost() {
   const [description, setDescription] = useState("");
@@ -46,6 +47,9 @@ function NewPost() {
             >
               Giver: {profile.name}
             </label>
+          </div>
+          <div>
+            <LocationSearchInput></LocationSearchInput>
           </div>
           <div>
             <label
