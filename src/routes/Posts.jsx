@@ -16,7 +16,9 @@ function Posts() {
 export default Posts;
 
 export async function loader() {
-  const response = await fetch(`${import.meta.env}/posts`);
+  const response = await fetch(
+    `https://blooming-reaches-75512.herokuapp.com/posts`
+  );
   const resData = await response.json();
   return resData.posts;
 }

@@ -21,7 +21,7 @@ function NewPost() {
 
     try {
       console.log(postData);
-      await fetch(`${import.meta.env}/posts`, {
+      await fetch(`https://blooming-reaches-75512.herokuapp.com/posts`, {
         method: "POST",
         body: JSON.stringify(postData),
         headers: {
