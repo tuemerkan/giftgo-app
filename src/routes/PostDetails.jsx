@@ -1,5 +1,5 @@
-import { useLoaderData, Link } from 'react-router-dom';
-import Modal from '../components/Modal';
+import { useLoaderData, Link } from "react-router-dom";
+import Modal from "../components/Modal";
 
 function PostDetails() {
   const post = useLoaderData();
@@ -11,9 +11,7 @@ function PostDetails() {
           <h1>Could not find post</h1>
           <p>Unfortunately, the requested post could not be found.</p>
           <p>
-            <Link to="..">
-              Okay
-            </Link>
+            <Link to="..">Okay</Link>
           </p>
         </main>
       </Modal>
@@ -21,7 +19,7 @@ function PostDetails() {
   }
   return (
     <Modal>
-      <main >
+      <main>
         <p>{post.author}</p>
         <p>{post.body}</p>
       </main>
@@ -31,8 +29,8 @@ function PostDetails() {
 
 export default PostDetails;
 
-export async function loader({params}) {
-  const response = await fetch('http://localhost:4000/posts/' + params.postId);
+export async function loader({ params }) {
+  const response = await fetch(`${import.meta.env}/posts/${params.postId}`);
   const resData = await response.json();
   return resData.post;
 }

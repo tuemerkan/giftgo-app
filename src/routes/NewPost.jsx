@@ -21,7 +21,7 @@ function NewPost() {
 
     try {
       console.log(postData);
-      await fetch("http://localhost:4000/posts", {
+      await fetch(`${import.meta.env}/posts`, {
         method: "POST",
         body: JSON.stringify(postData),
         headers: {

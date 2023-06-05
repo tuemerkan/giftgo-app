@@ -1,6 +1,6 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 
-import PostsList from '../components/PostsList';
+import PostsList from "../components/PostsList";
 
 function Posts() {
   return (
@@ -16,7 +16,7 @@ function Posts() {
 export default Posts;
 
 export async function loader() {
-  const response = await fetch('http://localhost:4000/posts');
+  const response = await fetch(`${import.meta.env}/posts`);
   const resData = await response.json();
   return resData.posts;
 }
